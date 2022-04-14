@@ -1,0 +1,14 @@
+#include "graphics_api.h"
+
+namespace Noor
+{	
+	namespace GraphicsAPI
+	{
+
+		void init()
+		{
+			
+		}
+
+	}
+}    

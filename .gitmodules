@@ -1,0 +1,9 @@
+[submodule "GLFW"]
+	path = deps/glfw
+	url = git@github.com:glfw/glfw.git
+[submodule "spdlog"]
+	path = deps/spdlog
+	url = git@github.com:gabime/spdlog.git
+[submodule "glm"]
+	path = deps/glm
+	url = git@github.com:g-truc/glm.git

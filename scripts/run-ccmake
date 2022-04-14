@@ -1,0 +1,3 @@
+#!/bin/sh
+
+CC=clang CXX=clang++ CMAKE_EXPORT_COMPILE_COMMANDS=true ccmake -G"Ninja Multi-Config" -B build/
