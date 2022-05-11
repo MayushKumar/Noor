@@ -25,8 +25,10 @@ set(src
   "src/init.cpp"
   "src/window.cpp"
   "src/log.cpp"
+  "src/util.cpp"
   "src/opengl_api.cpp"
   "src/opengl_buffers.cpp"
+  "src/opengl_shader.cpp"
   )
 
 add_library(Noor STATIC ${src})

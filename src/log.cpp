@@ -12,7 +12,7 @@ namespace Noor
 
 		void init()
 		{
-			spdlog::set_pattern("%^[%T] [%n] > %v%$");
+			spdlog::set_pattern("%^[%T] [%n] :: %v%$");
 			spClientLogger = spdlog::stdout_color_mt("CLIENT");
 			spClientLogger->set_level(spdlog::level::trace);
 			spCoreLogger = spdlog::stdout_color_mt("NOOR");

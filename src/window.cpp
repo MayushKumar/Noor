@@ -7,33 +7,42 @@ namespace Noor
 
 	namespace Window
 	{
-		std::unordered_map<WindowHandle, WindowProps> windowMap;	
+		std::unordered_map<WindowHandle, Ref<WindowProps>> windowMap;	
 
-		WindowHandle createWindow(WindowProps windowProps)
+		WindowHandle create_window(WindowProps window_props)
 		{
 			glfwInit();
 			glfwWindowHint(GLFW_RESIZABLE, true);
-			GLFWwindow* windowHandle = glfwCreateWindow(windowProps.width, windowProps.height, "Noor", nullptr, nullptr);
-			windowMap.emplace((WindowHandle)windowHandle, windowProps);
-			return (WindowHandle)windowHandle;
+			GLFWwindow* window_handle = glfwCreateWindow(window_props.width, window_props.height, "Noor", nullptr, nullptr);
+			Ref<WindowProps> window_props_ref = CreateRef<WindowProps>(window_props);
+			glfwSetWindowUserPointer(window_handle, window_props_ref.get());
+			windowMap.emplace((WindowHandle)window_handle, window_props_ref);
+
+			glfwSetKeyCallback(window_handle,
+							   [](GLFWwindow* window, int key, int scancode, int action, int mods) -> void {
+								   WindowProps* props = (WindowProps*)glfwGetWindowUserPointer(window);
+								   props->key_callback_fn(key, action, mods);
+							   });
+
+			return (WindowHandle)window_handle;
 		}
 
-		void pollEvents()
+		void poll_events()
 		{
 			glfwPollEvents();
 		}
 
-		void swapBuffers(WindowHandle window)
+		void swap_buffers(WindowHandle window)
 		{
 			glfwSwapBuffers((GLFWwindow*)window);
 		}
 
-		void setVSync(WindowHandle window, bool state)
+		void set_VSync(WindowHandle window, bool state)
 		{
 			glfwSwapInterval(!state);
 		}
 
-		bool windowShouldClose(WindowHandle window)
+		bool window_should_close(WindowHandle window)
 		{
 			return glfwWindowShouldClose((GLFWwindow*)window);
 		}			
