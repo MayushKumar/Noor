@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd sandbox/
+../build/sandbox/Debug/sandbox 
+cd ../

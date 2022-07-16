@@ -70,4 +70,19 @@ namespace Noor
 					   indices_count ? indices_count : vertex_array->index_buffer->count,
 					   vertex_array->index_buffer->data_type, nullptr);
 	}
+
+	void delete_vertex_buffer(Ref<VertexBuffer> buffer)
+	{
+		glDeleteBuffers(1, &buffer->id);
+	}
+
+	void delete_index_buffer(Ref<IndexBuffer> buffer)
+	{
+		glDeleteBuffers(1, &buffer->id);
+	}
+
+	void delete_vertex_array(Ref<VertexArray> vertex_array)
+	{
+		glDeleteVertexArrays(1, &vertex_array->id);
+	}
 }

@@ -2,6 +2,7 @@ project("sandbox")
 
 set(src
   "src/main.cpp"
+  "src/camera_controller.cpp"
   )
 
 add_executable(sandbox ${src})

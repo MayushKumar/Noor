@@ -2,16 +2,9 @@
 
 #include "window.h"
 
-#include <cstdint>
+namespace Noor 
+{
 
-namespace Noor {
-
-	struct Init
-	{
-		void* pWindowHandle;
-		uint32_t Width, Height;
-	};
-
-	void init(Window::WindowHandle windowHandle);
+	void init(Window::WindowHandle window_handle);
 	
 }

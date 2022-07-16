@@ -7,12 +7,8 @@
 namespace Noor
 {
 
-	Window::WindowHandle window_handle;
-	void gameLoop();
-
-	void init(Window::WindowHandle windowHandle)
+	void init(Window::WindowHandle window_handle)
 	{
-		Noor::window_handle = windowHandle;
 		Log::init();
 		GraphicsAPI::init(window_handle);
 	}

@@ -23,6 +23,17 @@ namespace Noor
 								   WindowProps* props = (WindowProps*)glfwGetWindowUserPointer(window);
 								   props->key_callback_fn(key, action, mods);
 							   });
+			glfwSetMouseButtonCallback(window_handle,
+									   [](GLFWwindow* window, int button,int action, int mods){
+										   WindowProps* props = (WindowProps*)glfwGetWindowUserPointer(window);
+										   props->mouse_button_callback_fn(button, action, mods);
+									   });
+			glfwSetCursorPosCallback((GLFWwindow*)window_handle,
+									 [](GLFWwindow* window, double x_pos, double y_pos){
+										 WindowProps* props = (WindowProps*)glfwGetWindowUserPointer(window);
+										 props->mouse_position_callback_fn(x_pos, y_pos);
+									 });
+
 
 			return (WindowHandle)window_handle;
 		}
@@ -42,10 +53,29 @@ namespace Noor
 			glfwSwapInterval(!state);
 		}
 
+		void set_cursor_enabled(WindowHandle window, bool enabled)
+		{
+			enabled ? glfwSetInputMode((GLFWwindow*)window, GLFW_CURSOR, GLFW_CURSOR_NORMAL)
+				    : glfwSetInputMode((GLFWwindow*)window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+
 		bool window_should_close(WindowHandle window)
 		{
 			return glfwWindowShouldClose((GLFWwindow*)window);
 		}			
+
+		bool is_key_pressed(WindowHandle window, uint32_t key)
+		{
+			return glfwGetKey((GLFWwindow*)window, key) == GLFW_PRESS;
+		}
+
+		void get_cursor_position(WindowHandle window, int32_t &x, int32_t &y)
+		{
+			double x_pos, y_pos;
+			glfwGetCursorPos((GLFWwindow*)window, &x_pos, &y_pos);
+			x = x_pos;
+			y = y_pos;
+		}
 
 	}
 }    

@@ -6,9 +6,13 @@
 #include <fstream>
 
 #include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Noor
 {
+
+	static std::unordered_map<uint32_t, std::unordered_map<const char*, uint32_t>> gs_uniform_location_cache;
 
 	Ref<Shader> create_shader_from_files(const char* vs_file_path, const char* fs_file_path)
 	{
@@ -20,17 +24,18 @@ namespace Noor
 
 		char* tmp_vs_src_ptr = (char*)vs_src.data;
 		glShaderSource(vs_id, 1, &tmp_vs_src_ptr, 0);
-		Util::free_loaded_file(vs_src);
 		glCompileShader(vs_id);
 		int vs_compile_status = 0;
 		glGetShaderiv(vs_id, GL_COMPILE_STATUS, &vs_compile_status);
 
 		char* tmp_fs_src_ptr = (char*)fs_src.data;
 		glShaderSource(fs_id, 1, &tmp_fs_src_ptr, 0);
-		Util::free_loaded_file(fs_src);
 		glCompileShader(fs_id);
 		int fs_compile_status = 0;
 		glGetShaderiv(fs_id, GL_COMPILE_STATUS, &fs_compile_status);
+
+		Util::free_loaded_file(vs_src);
+		Util::free_loaded_file(fs_src);
 
 		if (vs_compile_status == GL_FALSE)
 		{
@@ -70,6 +75,8 @@ namespace Noor
 		glDeleteShader(vs_id);
 		glDeleteShader(fs_id);
 
+		gs_uniform_location_cache.emplace(program_id, std::unordered_map<const char*, uint32_t>());
+
 		Ref<Shader> shader = CreateRef<Shader>();
 		shader->id = program_id;
 
@@ -79,6 +86,33 @@ namespace Noor
 	void bind_shader(Ref<Shader> shader)
 	{
 		glUseProgram(shader->id);
+	}
+
+	uint32_t get_uniform_location(Ref<Shader> shader, const char* name)
+	{
+		std::unordered_map<const char*, uint32_t>& uniform_map = gs_uniform_location_cache[shader->id];
+		auto location_it = uniform_map.find(name);
+		uint32_t location = 0;
+		if (location_it == uniform_map.end())
+		{
+			location = glGetUniformLocation(shader->id, name);
+			uniform_map.emplace(name, location);
+		} else
+		{
+			location = location_it->second;
+		}
+
+		return location;
+	}
+
+	void set_shader_uniform_mat4(Ref<Shader> shader, const char* name, glm::mat4& mat)
+	{
+		glProgramUniformMatrix4fv(shader->id, get_uniform_location(shader, name), 1, GL_FALSE, glm::value_ptr(mat));
+	}
+
+	void set_shader_uniform_int(Ref<Shader> shader, const char* name, int32_t value)
+	{
+		glProgramUniform1i(shader->id, get_uniform_location(shader, name), value);
 	}
 
 }

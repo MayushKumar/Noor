@@ -22,13 +22,18 @@ set(CMAKE_CXX_STANDARD 17)
 project("Noor")
 
 set(src
+  "deps/tinygltf/tiny_gltf.cpp"
+  "deps/stb/stb_image.cpp"
+
   "src/init.cpp"
   "src/window.cpp"
   "src/log.cpp"
   "src/util.cpp"
+  "src/camera.cpp"
   "src/opengl_api.cpp"
   "src/opengl_buffers.cpp"
   "src/opengl_shader.cpp"
+  "src/opengl_texture.cpp"
   )
 
 add_library(Noor STATIC ${src})
@@ -40,6 +45,8 @@ target_include_directories(Noor PUBLIC
   "deps/glfw/include"
   "deps/spdlog/include"
   "deps/glm"
+  "deps/stb"
+  "deps/tinygltf"
   )
 
 set_target_properties(Noor PROPERTIES LINKER_LANGUAGE CXX)

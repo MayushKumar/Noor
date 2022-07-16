@@ -3,8 +3,7 @@
 #include <memory.h>
 
 #include "log.h"
-#include "datatypes.h"
-#include "input_defs.h"
+#include "defs.h"
 
 namespace Noor
 {

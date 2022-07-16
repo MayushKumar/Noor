@@ -1,12 +1,12 @@
 {
-    "configurations": [
-    {
-        "type": "lldb",
-        "request": "launch",
-        "name": "Debug: sandbox",
-        "program": "${workspaceFolder}/build/sandbox/Debug/sandbox",
-        "args": [],
-        "cwd": "${workspaceFolder}/sandbox"
-    }
-    ]
+	"configurations": [
+		{
+			"type": "lldb",
+			"request": "launch",
+			"name": "Debug: sandbox",
+			"program": "${workspaceFolder}/build/sandbox/Debug/sandbox",
+			"args": [],
+			"cwd": "${workspaceFolder}/sandbox"
+		}	
+	]
 }

@@ -42,5 +42,9 @@ namespace Noor
 	void attach_vertex_buffer(Ref<VertexArray>& vertex_array, const Ref<VertexBuffer>& vertex_buffer, uint32_t attrib_offset);
 	void attach_index_buffer(Ref<VertexArray>& vertex_array, const Ref<IndexBuffer>& index_buffer);
 
+	void delete_vertex_buffer(Ref<VertexBuffer> buffer);
+	void delete_index_buffer(Ref<IndexBuffer> buffer);
+	void delete_vertex_array(Ref<VertexArray> vertex_array);
+
 	void draw_indexed(const Ref<VertexArray>& vertex_array, uint32_t indices_count = 0);
 }
