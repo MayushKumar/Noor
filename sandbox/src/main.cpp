@@ -18,8 +18,10 @@ Noor::Ref<Noor::IndexBuffer> index_buffer;
 Noor::Ref<Noor::VertexArray> vertex_array;
 Noor::Ref<Noor::Texture2D> texture;
 Noor::Ref<Noor::Shader> shader;
+Noor::Ref<Noor::Shader> pbr_shader;
+Noor::Ref<Noor::Model> model;
 
-static const uint32_t c_WINDOW_WIDTH = 1280, c_WINDOW_HEIGHT = 720;
+static const uint32_t c_WINDOW_WIDTH = 1680, c_WINDOW_HEIGHT = 1050;
 
 CameraController camera_controller;
 int main()
@@ -53,7 +55,7 @@ int main()
 	Noor::attach_index_buffer(vertex_array, index_buffer);
 
 	shader = Noor::create_shader_from_files("assets/shaders/test_vs.glsl", "assets/shaders/test_fs.glsl");
-	Noor::bind_shader(shader);
+	pbr_shader = Noor::create_shader_from_files("assets/shaders/pbr_vs.glsl", "assets/shaders/pbr_fs.glsl");
 
 	Noor::Util::Image image = Noor::Util::load_image("assets/textures/texture.png");
 	Noor::Texture2DProps texture_props;
@@ -63,6 +65,9 @@ int main()
 	texture_props.mag_filter = NOOR_NEAREST;
 	texture_props.wrapping = NOOR_REPEAT;
 	texture = Noor::create_texture(texture_props, image);
+	Noor::Util::free_image(image);
+
+	model = Noor::load_model("assets/models/round_wooden_table/round_wooden_table.gltf");
 
 	game_loop();
 
@@ -72,7 +77,7 @@ int main()
 void game_loop()
 {
 	Noor::bind_texture(texture, 1);
-	Noor::set_shader_uniform_int(shader, "u_texture", 1);
+	// Noor::set_shader_uniform_int(shader, "u_texture", 1);
 	while(!Noor::Window::window_should_close(window_handle))
 	{
 		Noor::Window::poll_events();
@@ -80,11 +85,24 @@ void game_loop()
 		camera_controller.update();
 
 		Noor::Window::swap_buffers(window_handle);
-		Noor::set_clear_color({0.05f, 0.05f, 0.05f});
+		Noor::set_clear_color({0.0f, 0.0f, 0.0f});
 		Noor::clear_color_buffer();
+		Noor::clear_depth_buffer();
 
-		Noor::set_shader_uniform_mat4(shader, "u_view_proj_mat", camera_controller.get_view_proj_matrix());
-		Noor::draw_indexed(vertex_array);
+		// Noor::bind_shader(shader);
+		Noor::bind_shader(pbr_shader);
+		Noor::set_shader_uniform_mat4(pbr_shader, "u_view_proj_mat", camera_controller.get_view_proj_matrix());
+		// Noor::draw_indexed(vertex_array);
+		for (uint32_t i = 0; i < model->meshes.size(); i++)
+		{
+			Noor::set_shader_uniform_int(pbr_shader, "material.base_tex", 0);
+			Noor::set_shader_uniform_int(pbr_shader, "material.normal_tex", 1);
+			Noor::set_shader_uniform_int(pbr_shader, "material.metallic_roughness_tex", 2);
+			Noor::bind_texture(model->meshes[i]->material->base_tex, 0);
+			Noor::bind_texture(model->meshes[i]->material->normal_tex, 1);
+			Noor::bind_texture(model->meshes[i]->material->metallic_roughness_tex, 2);
+			Noor::draw_indexed(model->meshes[i]->vertex_array);
+		}
 	}
 }
 
@@ -113,4 +131,7 @@ void shutdown()
 	Noor::delete_vertex_buffer(vertex_buffer);
 	Noor::delete_index_buffer(index_buffer);
 	Noor::delete_vertex_array(vertex_array);
+	Noor::delete_texture(texture);
+
+	Noor::delete_model(model);
 }

@@ -12,3 +12,4 @@
 #include "shader.h"
 #include "texture.h"
 #include "camera.h"
+#include "model.h"

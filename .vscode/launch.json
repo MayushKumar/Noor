@@ -1,6 +1,22 @@
 {
 	"configurations": [
 		{
+			"type": "gdb",
+			"request": "launch",
+			"name": "Debug(gdb): sandbox",
+			"target": "${workspaceFolder}/build/sandbox/Debug/sandbox",
+			"cwd": "${workspaceFolder}/sandbox",
+			"valuesFormatting": "prettyPrinters"
+		},
+		{
+			"type": "lldb-mi",
+			"request": "launch",
+			"name": "Debug(mi): sandbox",
+			"target": "${workspaceFolder}/build/sandbox/Debug/sandbox",
+			"cwd": "${workspaceFolder}/sandbox",
+			"valuesFormatting": "prettyPrinters"
+		},
+		{
 			"type": "lldb",
 			"request": "launch",
 			"name": "Debug: sandbox",

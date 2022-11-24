@@ -2364,6 +2364,8 @@ bool LoadImageData(Image *image, const int image_idx, std::string *err,
   int bits = 8;
   int pixel_type = TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE;
 
+  stbi_set_flip_vertically_on_load(true);
+
   // It is possible that the image we want to load is a 16bit per channel image
   // We are going to attempt to load it as 16bit per channel, and if it worked,
   // set the image data accodingly. We are casting the returned pointer into

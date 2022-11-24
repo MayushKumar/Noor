@@ -49,9 +49,9 @@ namespace Noor
 		for (uint32_t i = 0; i < vertex_buffer->elements.size(); i++)
 		{
 			VertexBufferElement &element = vertex_buffer->elements[i];
-			glVertexArrayAttribFormat(vertex_array->id, i, element.count, element.data_type, false, element.offset);
-			glEnableVertexArrayAttrib(vertex_array->id, i);
-			glVertexArrayAttribBinding(vertex_array->id, i, attrib_offset); 
+			glEnableVertexArrayAttrib(vertex_array->id, i + attrib_offset);
+			glVertexArrayAttribFormat(vertex_array->id, i + attrib_offset, element.count, element.data_type, false, element.offset);
+			glVertexArrayAttribBinding(vertex_array->id, i + attrib_offset, attrib_offset); 
 		}
 
 		vertex_array->vertex_buffers.push_back(vertex_buffer);

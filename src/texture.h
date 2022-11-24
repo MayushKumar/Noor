@@ -26,5 +26,6 @@ namespace Noor
 
 	Ref<Texture2D> create_texture(Texture2DProps props, Util::Image image);
 	void bind_texture(Ref<Texture2D> texture, uint32_t slot);
+	void delete_texture(Ref<Texture2D> texture);
 	
 }

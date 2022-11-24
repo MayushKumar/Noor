@@ -53,6 +53,7 @@ namespace Noor
 		}
 	}
 
+#define NOOR_RG8 0x822B
 #define NOOR_RGB8 0x8051
 #define NOOR_RGBA8 0x8058
 

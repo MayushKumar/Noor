@@ -24,6 +24,21 @@ namespace Util
 		return file;
 	}
 
+	File load_file_null_terminated(const char* file_path)
+	{
+		File file;
+		std::ifstream fs = std::ifstream(file_path, std::ios_base::binary);
+		fs.seekg(0, std::ios::end);
+		file.size = (uint32_t)fs.tellg();
+
+		file.data = malloc(file.size + 1);
+		fs.seekg(0, std::ios::beg);
+		fs.read((char*)file.data, file.size);
+		*((char*)file.data + file.size) = '\0'; // appending the null character
+		fs.close();
+		return file;
+	}
+
 	void free_loaded_file(File file)
 	{
 		free(file.data);
@@ -50,4 +65,4 @@ namespace Util
 	
 }
 	
-}	
+}

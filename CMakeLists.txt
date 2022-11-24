@@ -23,6 +23,7 @@ project("Noor")
 
 set(src
   "deps/tinygltf/tiny_gltf.cpp"
+  "deps/tinygltf/tiny_gltf.h"
   "deps/stb/stb_image.cpp"
 
   "src/init.cpp"
@@ -34,6 +35,7 @@ set(src
   "src/opengl_buffers.cpp"
   "src/opengl_shader.cpp"
   "src/opengl_texture.cpp"
+  "src/model.cpp"
   )
 
 add_library(Noor STATIC ${src})

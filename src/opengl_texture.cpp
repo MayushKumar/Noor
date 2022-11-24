@@ -35,6 +35,11 @@ namespace Noor
 		glBindTextureUnit(slot, texture->id);
 	}
 
+	void delete_texture(Ref<Texture2D> texture)
+	{
+		glDeleteTextures(1, &texture->id);
+	}
+
 	uint32_t internal_format_to_gl_base_format(uint32_t internal_format)
 	{
 		switch(internal_format)

@@ -16,8 +16,8 @@ namespace Noor
 
 	Ref<Shader> create_shader_from_files(const char* vs_file_path, const char* fs_file_path)
 	{
-		Util::File vs_src = Util::load_file(vs_file_path);
-		Util::File fs_src = Util::load_file(fs_file_path);
+		Util::File vs_src = Util::load_file_null_terminated(vs_file_path);
+		Util::File fs_src = Util::load_file_null_terminated(fs_file_path);
 
 		uint32_t vs_id = glCreateShader(GL_VERTEX_SHADER);
 		uint32_t fs_id = glCreateShader(GL_FRAGMENT_SHADER);
@@ -37,19 +37,23 @@ namespace Noor
 		Util::free_loaded_file(vs_src);
 		Util::free_loaded_file(fs_src);
 
+		bool failed = false;
 		if (vs_compile_status == GL_FALSE)
 		{
-			glDeleteShader(vs_id);
-			glDeleteShader(fs_id);
 			NOOR_CORE_ERROR("Could not compile vertex shader : {0}", vs_file_path);
-			return nullptr;
+			failed = true;
 		}
 
-		if (vs_compile_status == GL_FALSE)
+		if (fs_compile_status == GL_FALSE)
+		{
+			NOOR_CORE_ERROR("Could not compile fragment shader : {0}", fs_file_path);
+			failed = true;
+		}
+
+		if (failed)
 		{
 			glDeleteShader(vs_id);
 			glDeleteShader(fs_id);
-			NOOR_CORE_ERROR("Could not compile fragment shader : {0}", fs_file_path);
 			return nullptr;
 		}
 

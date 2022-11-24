@@ -9,6 +9,6 @@ out vec4 COLOR;
 
 void main()
 {
-	COLOR = vec4(v_TEXCOORDS, 0.0f, 1.0f);
+	COLOR = vec4(v_TEXCOORDS, 0.0, 1.0);
 	COLOR = texture(u_texture, v_TEXCOORDS);
 }
