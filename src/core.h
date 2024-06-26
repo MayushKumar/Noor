@@ -1,20 +1,11 @@
 #pragma once
 
-#include <memory.h>
+#include "window.h"
 
-#include "log.h"
-#include "defs.h"
-
-namespace Noor
+namespace Noor 
 {
-	template<typename T>
-	using Ref = std::shared_ptr<T>;
 
-	template<typename T, typename ... Args>
-	constexpr Ref<T> CreateRef(Args&& ... args)
-	{
-		return std::make_shared<T>(std::forward<Args>(args) ...);
-	}
+	void init(Window::WindowHandle window_handle, Window::WindowProps props);
+	void shutdown();
+
 }
-
-

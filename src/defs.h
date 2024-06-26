@@ -1,18 +1,17 @@
 #pragma once
 
-#include <cinttypes>
+#include <memory>
 
-namespace Noor
-{
-	
-	using DataType = uint32_t;
-	
+
+// ---------------------------------------- DATA TYPES ---------------------------------------- 
+
 #define NOOR_BYTE		0x1400
 #define NOOR_UBYTE		0x1401
 #define NOOR_SHORT		0x1402
 #define NOOR_USHORT		0x1403
 #define NOOR_INT		0x1404
 #define NOOR_UINT		0x1405
+#define NOOR_HALF_FLOAT 0x140B
 #define NOOR_FLOAT		0x1406
 #define NOOR_FLOAT2	    0x8B50
 #define NOOR_FLOAT3	    0x8B51
@@ -28,34 +27,68 @@ namespace Noor
 // #define NOOR_FLOATMAT3	0x8B5B
 // #define NOOR_FLOATMAT4	0x8B5C
 
+namespace Noor
+{
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+
+	template<typename T, typename ... Args>
+	constexpr Ref<T> CreateRef(Args&& ... args)
+	{
+		return std::make_shared<T>(std::forward<Args>(args) ...);
+	}
+	
+	using DataType = uint32_t;
+	
+
 	inline uint32_t data_type_size(DataType type)
 	{
 		switch (type)
 		{
-		case NOOR_BYTE:		return 1;
-		case NOOR_UBYTE:	return 1;
-		case NOOR_SHORT:	return 2;
-		case NOOR_USHORT:	return 2;
-		case NOOR_INT:		return 4;
-		case NOOR_UINT:		return 4;
-		case NOOR_FLOAT:	return 4;
-		case NOOR_FLOAT2:	return 8;
-		case NOOR_FLOAT3:	return 12;
-		case NOOR_FLOAT4:	return 16;
-		case NOOR_INT2:		return 8;
-		case NOOR_INT3:		return 12;
-		case NOOR_INT4:		return 16;
-		case NOOR_BOOL:		return 1;
-		case NOOR_BOOL2:	return 2;
-		case NOOR_BOOL3:	return 3;
-		case NOOR_BOOL4:	return 4;
-		default:			return 0;
+		case NOOR_BYTE:		    return 1;
+		case NOOR_UBYTE:	    return 1;
+		case NOOR_SHORT:	    return 2;
+		case NOOR_USHORT:	    return 2;
+		case NOOR_INT:		    return 4;
+		case NOOR_UINT:		    return 4;
+		case NOOR_HALF_FLOAT:	return 2;
+		case NOOR_FLOAT:	    return 4;
+		case NOOR_FLOAT2:	    return 8;
+		case NOOR_FLOAT3:	    return 12;
+		case NOOR_FLOAT4:	    return 16;
+		case NOOR_INT2:		    return 8;
+		case NOOR_INT3:		    return 12;
+		case NOOR_INT4:		    return 16;
+		case NOOR_BOOL:		    return 1;
+		case NOOR_BOOL2:	    return 2;
+		case NOOR_BOOL3:	    return 3;
+		case NOOR_BOOL4:	    return 4;
+		default:			    return 0;
 		}
 	}
 
+	
+}    
+
+// ---------------------------------------- TEXTURE FORMATS ---------------------------------------- 
+
+#define NOOR_R16 0x822A
+#define NOOR_R16F 0x822D
+#define NOOR_RG16F 0x822F
+#define NOOR_RG32F 0x8230
 #define NOOR_RG8 0x822B
 #define NOOR_RGB8 0x8051
 #define NOOR_RGBA8 0x8058
+#define NOOR_RGB16F 0x881B
+#define NOOR_RGB32F 0x8815
+#define NOOR_SRGB8 0x8C41
+#define NOOR_SRGB8_ALPHA8 0x8C43
+#define NOOR_DEPTH_COMPONENT16 0x81A5
+#define NOOR_DEPTH_COMPONENT24 0x81A6
+#define NOOR_DEPTH_COMPONENT32 0x81A7
+#define NOOR_DEPTH_COMPONENT32F 0x8CAC
+
+// ---------------------------------------- TEXTURE FILTERING ---------------------------------------- 
 
 #define NOOR_NEAREST 0x2600
 #define NOOR_LINEAR 0x2601
@@ -63,10 +96,26 @@ namespace Noor
 #define NOOR_LINEAR_MIPMAP_NEAREST 0x2701
 #define NOOR_NEAREST_MIPMAP_LINEAR 0x2702
 #define NOOR_LINEAR_MIPMAP_LINEAR 0x2703
+
+// ---------------------------------------- TEXTURE WRAPPING ---------------------------------------- 
+
 #define NOOR_REPEAT 0x2901
+#define NOOR_CLAMP_TO_EDGE 0x812F
 
-/* THESE KEYS ARE EXACT COPIES OF GLFW KEYS */
+// ---------------------------------------- CUBEMAP FACES ---------------------------------------- 
 
+#define NOOR_CUBEMAP_POS_X 0
+#define NOOR_CUBEMAP_NEG_X 1
+#define NOOR_CUBEMAP_POS_Y 2
+#define NOOR_CUBEMAP_NEG_Y 3
+#define NOOR_CUBEMAP_POS_Z 4
+#define NOOR_CUBEMAP_NEG_Z 5
+
+
+// -------------------------------------------- KEYS --------------------------------------------
+
+
+// THESE KEYS ARE EXACT COPIES OF GLFW KEYS
 #define NOOR_RELEASED                0
 #define NOOR_PRESSED                 1
 #define NOOR_REPEATED                2
@@ -193,6 +242,15 @@ namespace Noor
 #define NOOR_KEY_RIGHT_SUPER        347
 #define NOOR_KEY_MENU               348
 
+#define NOOR_MOD_SHIFT           0x0001
+#define NOOR_MOD_CONTROL         0x0002
+#define NOOR_MOD_ALT             0x0004
+#define NOOR_MOD_SUPER           0x0008
+#define NOOR_MOD_CAPS_LOCK       0x0010
+#define NOOR_MOD_NUM_LOCK        0x0020
+
+// ---------------------------------------- MOUSE BUTTONS ---------------------------------------- 
+
 #define NOOR_MOUSE_BUTTON_1         0
 #define NOOR_MOUSE_BUTTON_2         1
 #define NOOR_MOUSE_BUTTON_3         2
@@ -206,11 +264,3 @@ namespace Noor
 #define NOOR_MOUSE_BUTTON_RIGHT     NOOR_MOUSE_BUTTON_2
 #define NOOR_MOUSE_BUTTON_MIDDLE    NOOR_MOUSE_BUTTON_3
 
-#define NOOR_MOD_SHIFT           0x0001
-#define NOOR_MOD_CONTROL         0x0002
-#define NOOR_MOD_ALT             0x0004
-#define NOOR_MOD_SUPER           0x0008
-#define NOOR_MOD_CAPS_LOCK       0x0010
-#define NOOR_MOD_NUM_LOCK        0x0020
-	
-}    

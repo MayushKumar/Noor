@@ -1,8 +1,8 @@
 #include "camera_controller.h"
 
-#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/quaternion.hpp>
 
-static const float c_TRANS_SPEED = 0.1f, c_ROTATION_SPEED = 0.001f, c_ROTATION_DRAG = 0.4f;
+static const float c_TRANS_SPEED = 0.015f, c_ROTATION_SPEED = 0.001f, c_ROTATION_DRAG = 0.4f;
 
 CameraController::CameraController(Noor::Window::WindowHandle window_handle, float fov, float aspect_ratio, float near, float far)
 {
@@ -25,20 +25,35 @@ void CameraController::update()
 
 	m_drag_mouse_pos += delta_mouse_pos * c_ROTATION_DRAG;
 
-	m_yaw += -delta_mouse_pos.x * c_ROTATION_SPEED;
-	m_pitch += -delta_mouse_pos.y * c_ROTATION_SPEED;
-
+	m_yaw += -delta_mouse_pos.x * c_ROTATION_SPEED - m_right_joystick_x * 0.06f;
+	m_pitch += -delta_mouse_pos.y * c_ROTATION_SPEED - m_right_joystick_y * 0.06f;
 	m_pitch = glm::clamp(m_pitch, glm::radians(-90.0f), glm::radians(90.0f));
 
 	m_camera->orientation = glm::quat(glm::vec3(m_pitch, m_yaw, 0.0f));
 
 	m_camera->position += m_camera->orientation * m_pos_delta * c_TRANS_SPEED;
+
 	Noor::calculate_camera_view_matrix(m_camera);
 }
 
 glm::mat4& CameraController::get_view_proj_matrix()
 {
 	return m_camera->view_proj_mat;
+}
+
+glm::mat4& CameraController::get_proj_matrix()
+{
+	return m_camera->proj_mat;
+}
+
+glm::quat& CameraController::get_orientation()
+{
+	return m_camera->orientation;
+}
+
+glm::vec3& CameraController::get_position()
+{
+	return m_camera->position;
 }
 
 void CameraController::key_event(uint32_t key, uint32_t action, uint32_t mods)
@@ -92,6 +107,12 @@ void CameraController::mouse_position_event(int32_t x, int32_t y)
 	if (!m_is_enabled) return;
 
 	m_current_mouse_pos = glm::vec2(x, y);
+}
+
+void CameraController::right_joystick_xy(float x, float y)
+{
+	m_right_joystick_x = x;
+	m_right_joystick_y = y;
 }
 
 void CameraController::set_enabled(bool enabled)

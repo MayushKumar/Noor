@@ -1,0 +1,6 @@
+#!/bin/sh
+
+./scripts/build-debug 
+cd sandbox/
+lldb -f ../build/sandbox/Debug/sandbox 
+cd ../

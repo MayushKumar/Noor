@@ -1,8 +1,7 @@
 #pragma once
+#include "defs.h"
 
-#include "core.h"
-
-#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace Noor
 {

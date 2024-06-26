@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.5)
 
 if(UNIX)
   SET (CMAKE_EXE_LINKER_FLAGS      "-Wl,--no-as-needed -fuse-ld=lld -ldl")
@@ -26,16 +26,19 @@ set(src
   "deps/tinygltf/tiny_gltf.h"
   "deps/stb/stb_image.cpp"
 
-  "src/init.cpp"
+  "src/core.cpp"
   "src/window.cpp"
   "src/log.cpp"
   "src/util.cpp"
+  "src/renderer_data.cpp"
   "src/camera.cpp"
+  "src/model.cpp"
+  "src/skybox.cpp"
   "src/opengl_api.cpp"
   "src/opengl_buffers.cpp"
   "src/opengl_shader.cpp"
   "src/opengl_texture.cpp"
-  "src/model.cpp"
+  "src/opengl_framebuffer.cpp"
   )
 
 add_library(Noor STATIC ${src})

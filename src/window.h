@@ -1,7 +1,5 @@
 #pragma once
 
-#include "core.h"
-
 #include <unordered_map>
 #include <cstdint>
 
@@ -35,6 +33,8 @@ namespace Noor
 		bool window_should_close(WindowHandle window);
 		bool is_key_pressed(uint32_t key);
 		void get_cursor_position(WindowHandle window, int32_t &x, int32_t &y);
+		unsigned char* get_joystick_buttons(int& count);
+		float* get_joystick_axes(int& count);
 	}
 	
 }    

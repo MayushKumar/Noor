@@ -1,9 +1,8 @@
 #include "shader.h"
 
-#include "core.h"
+#include "defs.h"
+#include "log.h"
 #include "util.h"
-
-#include <fstream>
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -83,8 +82,19 @@ namespace Noor
 
 		Ref<Shader> shader = CreateRef<Shader>();
 		shader->id = program_id;
+		shader->vs_file_path = vs_file_path;
+		shader->fs_file_path = fs_file_path;
 
 		return shader;
+	}
+
+	bool recompile_shader(Ref<Shader> shader)
+	{
+		Ref<Shader> temp = create_shader_from_files(shader->vs_file_path.c_str(), shader->fs_file_path.c_str());
+		if(!temp) return false;
+		glDeleteProgram(shader->id);
+		shader->id = temp->id;
+		return true;
 	}
 
 	void bind_shader(Ref<Shader> shader)
@@ -109,6 +119,11 @@ namespace Noor
 		return location;
 	}
 
+	void set_shader_uniform_vec3(Ref<Shader> shader, const char *name, glm::vec3 vec)
+	{
+		glProgramUniform3fv(shader->id, get_uniform_location(shader, name), 1, glm::value_ptr(vec));
+	}
+
 	void set_shader_uniform_mat4(Ref<Shader> shader, const char* name, glm::mat4& mat)
 	{
 		glProgramUniformMatrix4fv(shader->id, get_uniform_location(shader, name), 1, GL_FALSE, glm::value_ptr(mat));
@@ -117,6 +132,16 @@ namespace Noor
 	void set_shader_uniform_int(Ref<Shader> shader, const char* name, int32_t value)
 	{
 		glProgramUniform1i(shader->id, get_uniform_location(shader, name), value);
+	}
+
+	void set_shader_uniform_float(Ref<Shader> shader, const char* name, float value)
+	{
+		glProgramUniform1f(shader->id, get_uniform_location(shader, name), value);
+	}
+
+	void delete_shader(Ref<Shader> shader)
+	{
+		glDeleteProgram(shader->id);
 	}
 
 }

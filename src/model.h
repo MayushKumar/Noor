@@ -25,11 +25,15 @@ namespace Noor
 		
 		Ref<VertexBuffer> positions_buffer;
 		Ref<VertexBuffer> normals_buffer;
+		Ref<VertexBuffer> tangents_buffer;
+		Ref<VertexBuffer> bitangents_buffer;
 		Ref<VertexBuffer> tex_coords_buffer;
 
 		Ref<VertexArray> vertex_array;
 
 		Ref<Material> material;
+
+		glm::vec3 translation;
 	};
 
 	struct Model

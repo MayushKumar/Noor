@@ -23,6 +23,14 @@
 			"program": "${workspaceFolder}/build/sandbox/Debug/sandbox",
 			"args": [],
 			"cwd": "${workspaceFolder}/sandbox"
+		},
+		{
+			"type": "lldb-vscode",
+			"request": "launch",
+			"name": "Debug: sandbox (lldb-vscode)",
+			"program": "${workspaceFolder}/build/sandbox/Debug/sandbox",
+			"args": [],
+			"cwd": "${workspaceFolder}/sandbox"
 		}	
 	]
 }

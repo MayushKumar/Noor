@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd sandbox
+colour-valgrind ../build/sandbox/Debug/sandbox
+cd ../

@@ -1,5 +1,7 @@
 #include "window.h"
 
+#include "defs.h"
+
 #include <GLFW/glfw3.h>
 
 namespace Noor
@@ -13,6 +15,12 @@ namespace Noor
 		{
 			glfwInit();
 			glfwWindowHint(GLFW_RESIZABLE, true);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+			glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+
 			GLFWwindow* window_handle = glfwCreateWindow(window_props.width, window_props.height, "Noor", nullptr, nullptr);
 			Ref<WindowProps> window_props_ref = CreateRef<WindowProps>(window_props);
 			glfwSetWindowUserPointer(window_handle, window_props_ref.get());
@@ -33,7 +41,11 @@ namespace Noor
 										 WindowProps* props = (WindowProps*)glfwGetWindowUserPointer(window);
 										 props->mouse_position_callback_fn(x_pos, y_pos);
 									 });
-
+			// for(int i = 0; i < 5; i++)
+			// {
+			// 	NOOR_CORE_INFO("{0} : {1}", i + 1, glfwJoystickPresent(GLFW_JOYSTICK_1 + i));
+			// 	// NOOR_CORE_INFO("{0}", i + 1);
+			// }
 
 			return (WindowHandle)window_handle;
 		}
@@ -75,6 +87,20 @@ namespace Noor
 			glfwGetCursorPos((GLFWwindow*)window, &x_pos, &y_pos);
 			x = x_pos;
 			y = y_pos;
+		}
+
+		unsigned char* get_joystick_buttons(int& count)
+		{
+			unsigned char* ptr;
+			glfwGetJoystickButtons(GLFW_JOYSTICK_1, &count);
+			return ptr;
+		}
+
+		float* get_joystick_axes(int& count)
+		{
+			float* ptr;
+			glfwGetJoystickAxes(GLFW_JOYSTICK_1, &count);
+			return ptr;
 		}
 
 	}

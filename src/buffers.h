@@ -1,5 +1,7 @@
 #pragma once
-#include "core.h"
+
+#include <vector>
+#include "defs.h"
 
 namespace Noor
 {

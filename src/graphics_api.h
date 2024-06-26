@@ -12,10 +12,11 @@ namespace Noor
 
 	}
 
-	void set_clear_color(glm::vec3 color);
-	void clear_color_buffer();
-	void clear_depth_buffer();
-	void set_viewport(uint32_t width, uint32_t height);
+	// void set_viewport(uint32_t width, uint32_t height);
+	void push_viewport(uint32_t width, uint32_t height);
+	void pop_viewport();
 	void set_backface_culling(bool enabled);
+	void set_depth_testing(bool enabled);
+	void set_depth_mask(bool enabled);
 
 }    
