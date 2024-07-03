@@ -1,0 +1,34 @@
+* Noor
+A work-in-progress 3D PBR Renderer written in C++. This is a personal project aimed towards exploring the wonderful world of Real-Time Computer Graphics.
+#+ATTR_ORG: :width 200
+#+CAPTION: A render of Cerberus by Andrew Maximov
+#+NAME:   fig:Cerberus
+[[./images/cerberus_cobblestone.png]]
+
+** Building and Running the sandbox
+The project has only been tested with GNU/GCC and Clang on Linux, and MinGW on Windows.
+
+Clone the repository recursively with the following
+#+begin_src
+  git clone --depth 1 --recursive https://github.com/MayushKumar/Noor.git
+#+end_src
+*** Linux
+#+begin_src shell
+  cd Noor
+  cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -G "Unix Makefiles" . -B build/
+  cmake --build build -j$(nproc)
+  cd sanbox
+  ../build/sandbox/sandbox
+#+end_src
+*** Windows
+Make sure to have MinGW GCC and Make on your path
+#+begin_src shell
+  cd Noor
+  cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -G "MinGW Makefiles" . -B build\
+  cmake --build build -j %NUMBER_OF_PROCESSORS%
+  cd sanbox
+  ..\build\sandbox\sandbox.exe
+#+end_src
+
+
+

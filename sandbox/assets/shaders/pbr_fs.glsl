@@ -35,7 +35,7 @@ uniform Material material;
 in PointLight v_light;
 in vec3 v_pos;
 
-const float ENV_MULTIPLIER = 2.0;
+const float ENV_MULTIPLIER = 0.8;
 
 float D_GGX(float NoH, float alpha);
 float V_SmithGGXCorrelated(float NoV, float NoL, float alpha);
@@ -90,6 +90,7 @@ void main()
 
 	// COLOR = vec4( albedo * 0.04 + (f_d + f_r) * NoL * test_light_power * falloff_coeff/ (4 * PI), 1.0);
 	COLOR = vec4(ENV_MULTIPLIER * (diffuse + specular), 1.0);
+	// COLOR = vec4(vec3(metallic), 1.0);
 }
 
 float D_GGX(float NoH, float alpha)

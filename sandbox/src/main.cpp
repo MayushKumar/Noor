@@ -71,7 +71,9 @@ int main()
 	normal_mats[1] = glm::inverse(glm::transpose(model_mats[1]));
 	normal_mats[0] = glm::inverse(glm::transpose(model_mats[0]));
 	models[1] = Noor::load_model("assets/models/cerberus/gltf/Cerberus.gltf");
-	models[0] = Noor::load_model("assets/models/chest/treasure_chest_2k.gltf");
+	// models[0] = Noor::load_model("assets/models/chest/treasure_chest_2k.gltf");
+	// models[0] = Noor::load_model("assets/models/chess_set/chess_set_2k.gltf");
+	models[0] = Noor::load_model("assets/models/brass_goblets/brass_goblets_2k.gltf");
 #endif
 
 	framebuffer = Noor::create_framebuffer();
@@ -93,7 +95,14 @@ int main()
 
 
 	// ---------------------------------------- Sky Box -----------------------------------------------------------------------
-	Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/meadow_2_4k.hdr");
+	Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/rosendal_park_sunset_4k.hdr");
+	// Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/cobblestone_street_night_4k.hdr");
+	// Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/old_hall_4k.hdr");
+	// Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/victoria_sunset_4k.hdr");
+	// Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/fireplace_4k.hdr");
+	// Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/quarry_cloudy_4k.hdr");
+	// Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/puresky_4k.hdr");
+	// Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/meadow_2_4k.hdr");
 	// Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/chinese_garden_4k.hdr");
 	// Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/hotel_rooftop_balcony_4k.hdr");
 	// Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/oberer_kuhberg_4k.hdr");

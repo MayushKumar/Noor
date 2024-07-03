@@ -1,0 +1,8 @@
+#!/bin/sh
+
+file * | grep "16-bit" | cut -d ":" -f 1 | while read file
+do
+	echo "Converting $file"
+	mv "$file" "$file.bak"
+	magick "$file.bak" -depth 8 "$file"
+done
