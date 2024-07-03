@@ -4,6 +4,10 @@ A work-in-progress 3D PBR Renderer written in C++. This is a personal project ai
 #+CAPTION: A render of Cerberus by Andrew Maximov
 #+NAME:   fig:Cerberus
 [[./images/cerberus_cobblestone.png]]
+#+ATTR_ORG: :width 200
+#+CAPTION: A render of a chess set
+#+NAME:   fig:Chess
+[[./images/chess_puresky.png]]
 
 ** Building and Running the sandbox
 The project has only been tested with GNU/GCC and Clang on Linux, and MinGW on Windows.
