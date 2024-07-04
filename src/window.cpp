@@ -62,7 +62,7 @@ namespace Noor
 
 		void set_VSync(WindowHandle window, bool state)
 		{
-			glfwSwapInterval(!state);
+			glfwSwapInterval(state);
 		}
 
 		void set_cursor_enabled(WindowHandle window, bool enabled)

@@ -5,6 +5,7 @@
 #include "renderer_data.h"
 #include "shader.h"
 #include "texture.h"
+#include "window.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -33,6 +34,7 @@ glm::mat4 cubemap_proj_mat;
 glm::mat4 model_mats[2];
 glm::mat4 normal_mats[2];
 uint32_t model_index = 0;
+bool is_VSync = true;
 
 static const uint32_t c_WINDOW_WIDTH = 1920, c_WINDOW_HEIGHT = 1080;
 static const uint32_t c_CUBEMAP_DIM = 1024;
@@ -252,6 +254,11 @@ void key_callback(int32_t key, int32_t action, int32_t mods) {
 			Noor::set_shader_uniform_int(Noor::g_renderer_data->irrad_conv_shader, "u_envmap", 0);
 			Noor::render_to_cubemap(irrad_conv_cubemap, 0, Noor::g_renderer_data->irrad_conv_shader);
 		}
+	}
+	else if (key == NOOR_KEY_V && action == NOOR_PRESSED)
+	{
+		is_VSync = !is_VSync;
+		Noor::Window::set_VSync(window_handle, is_VSync);
 	}
 }
 

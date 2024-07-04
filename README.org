@@ -16,6 +16,7 @@ Clone the repository recursively with the following
 #+begin_src
   git clone --depth 1 --recursive https://github.com/MayushKumar/Noor.git
 #+end_src
+
 *** Linux
 #+begin_src shell
   cd Noor
@@ -24,6 +25,7 @@ Clone the repository recursively with the following
   cd sanbox
   ../build/sandbox/sandbox
 #+end_src
+
 *** Windows
 Make sure to have MinGW GCC and Make on your path
 #+begin_src shell
@@ -33,6 +35,11 @@ Make sure to have MinGW GCC and Make on your path
   cd sanbox
   ..\build\sandbox\sandbox.exe
 #+end_src
+
+*** Controls
+- ~x~ to toggle the camera control
+- ~w~, ~a~, ~s~, ~d~ to move the FPS-style camera
+- Mouse to look around
 
 
 
