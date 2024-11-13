@@ -2,7 +2,6 @@
 
 class CameraController
 {
-
 public:
 	CameraController() {}
 	CameraController(Noor::Window::WindowHandle window_handle, float fov, float aspect_ratio, float near, float far);

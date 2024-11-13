@@ -1,8 +1,10 @@
 #pragma once
 
 #include "buffers.h"
+#include "defs.h"
 #include "texture.h"
 
+#include <string>
 #include <glm/glm.hpp>
 
 namespace Noor

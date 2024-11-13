@@ -74,9 +74,9 @@ namespace Noor
 		uint32_t indices[6] = {0, 1, 2, 1, 3, 2};
 		
 		Ref<VertexBuffer> vertex_buffer = Noor::create_vertex_buffer((void*)vertices, sizeof(vertices),
-												   {{"POSITION", NOOR_FLOAT, 3, 0},
-													{"TEXCOORDS", NOOR_FLOAT, 2, 3 * sizeof(float)}});
-		Ref<IndexBuffer> index_buffer = Noor::create_index_buffer((void*)indices, sizeof(indices), NOOR_UINT);
+																	 {{"POSITION", DataType::F32, 3, 0},
+																	 {"TEXCOORDS", DataType::F32, 2, 3 * sizeof(float)}});
+		Ref<IndexBuffer> index_buffer = Noor::create_index_buffer((void*)indices, sizeof(indices), DataType::U32);
 		g_renderer_data->unit_quad_vao = Noor::create_vertex_array();
 		Noor::attach_vertex_buffer(g_renderer_data->unit_quad_vao, vertex_buffer, 0);
 		Noor::attach_index_buffer(g_renderer_data->unit_quad_vao, index_buffer);
@@ -126,9 +126,9 @@ namespace Noor
 		};
 
 		Ref<VertexBuffer> vertex_buffer = create_vertex_buffer(vertices, sizeof(vertices),
-															   {{"POSITION", NOOR_FLOAT, 3, 0}});
-		Ref<IndexBuffer> index_buffer = create_index_buffer(indices, sizeof(indices), NOOR_USHORT);
-		Ref<IndexBuffer> inv_index_buffer = create_index_buffer(inv_indices, sizeof(inv_indices), NOOR_USHORT);
+															   {{"POSITION", DataType::F32, 3, 0}});
+		Ref<IndexBuffer> index_buffer = create_index_buffer(indices, sizeof(indices), DataType::U16);
+		Ref<IndexBuffer> inv_index_buffer = create_index_buffer(inv_indices, sizeof(inv_indices), DataType::U16);
 
 		g_renderer_data->cube_vao = create_vertex_array();
 		attach_vertex_buffer(g_renderer_data->cube_vao, vertex_buffer, 0);
@@ -171,11 +171,11 @@ namespace Noor
 		if(Util::file_exists("assets/textures/dfg_lut.bin"))
 		{
 			Util::File file = Util::load_file("assets/textures/dfg_lut.bin");
-			Util::Image image = {256, 256, NOOR_HALF_FLOAT, 2, file.data};
-			g_renderer_data->DFG_lut = create_texture({256, 256, NOOR_RG16F, 0, NOOR_LINEAR, NOOR_LINEAR, NOOR_CLAMP_TO_EDGE}, image);
+			Util::Image image = {256, 256, DataType::F16, 2, file.data};
+			g_renderer_data->DFG_lut = create_texture({256, 256, TextureFormat::RG16F, 0, NOOR_LINEAR, NOOR_LINEAR, NOOR_CLAMP_TO_EDGE}, image);
 		} else
 		{
-			g_renderer_data->DFG_lut = create_texture({256, 256, NOOR_RG16F, 0, NOOR_LINEAR, NOOR_LINEAR, NOOR_REPEAT});
+			g_renderer_data->DFG_lut = create_texture({256, 256, TextureFormat::RG16F, 0, NOOR_LINEAR, NOOR_LINEAR, NOOR_REPEAT});
 			attach_color_texture2D(g_renderer_data->scratch_framebuffer, g_renderer_data->DFG_lut, 0, 0);
 
 			bind_shader(g_renderer_data->DFG_shader);

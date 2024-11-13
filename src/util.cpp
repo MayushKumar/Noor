@@ -85,12 +85,12 @@ namespace Util
 		if (stbi_is_hdr(file_path))
 		{
 			image.data = stbi_loadf(file_path, &x, &y, &channels, 0);
-			image.type = NOOR_FLOAT;
+			image.type = DataType::F32;
 		}
 		else
 		{
 			image.data = stbi_load(file_path, &x, &y, &channels, desired_channels);
-			image.type = NOOR_UBYTE;
+			image.type = DataType::U8;
 		}
 
 		if (!image.data)

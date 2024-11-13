@@ -12,7 +12,7 @@ namespace Noor
 		uint32_t width;
 		uint32_t height;
 
-		uint32_t internal_format;
+		TextureFormat internal_format;
 		uint32_t mip_count;
 
 		uint32_t min_filter;

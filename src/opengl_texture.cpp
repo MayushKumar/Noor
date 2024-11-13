@@ -9,10 +9,7 @@
 namespace Noor
 {
 
-	uint32_t internal_format_to_channels(uint32_t internal_format);
-	uint32_t internal_format_to_type(uint32_t internal_format);
-	uint32_t internal_format_to_gl_base_format(uint32_t internal_format);
-	uint32_t internal_format_to_gl_data_type(uint32_t internal_format);
+	uint32_t texture_format_to_channels(TextureFormat format);
 
 	Ref<Texture2D> create_texture(Texture2DProps props)
 	{
@@ -20,7 +17,8 @@ namespace Noor
 		texture->props = props;
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &texture->id);
-		glTextureStorage2D(texture->id, props.mip_count + 1, props.internal_format, props.width, props.height);
+		glTextureStorage2D(texture->id, props.mip_count + 1,
+						   texture_format_to_gl_internal(props.internal_format), props.width, props.height);
 
 		glTextureParameteri(texture->id, GL_TEXTURE_MAG_FILTER, props.mag_filter);
 		glTextureParameteri(texture->id, GL_TEXTURE_MIN_FILTER, props.min_filter);
@@ -36,11 +34,11 @@ namespace Noor
 		texture->props = props;
 		
 		glCreateTextures(GL_TEXTURE_2D, 1, &texture->id);
-		glTextureStorage2D(texture->id, props.mip_count + 1, props.internal_format, image.width, image.height);
+		glTextureStorage2D(texture->id, props.mip_count + 1, texture_format_to_gl_internal(props.internal_format), image.width, image.height);
 
 		glTextureSubImage2D(texture->id, 0, 0, 0, image.width, image.height,
-							internal_format_to_gl_base_format(props.internal_format),
-							internal_format_to_gl_data_type(props.internal_format), image.data);
+							texture_format_to_gl_base(props.internal_format),
+							texture_format_to_gl_data_type(props.internal_format), image.data);
 
 		glTextureParameteri(texture->id, GL_TEXTURE_MAG_FILTER, props.mag_filter);
 		glTextureParameteri(texture->id, GL_TEXTURE_MIN_FILTER, props.min_filter);
@@ -91,14 +89,14 @@ namespace Noor
 		Util::Image image;
 		image.width = texture->props.width;
 		image.height = texture->props.height;
-		uint32_t internal_format = texture->props.internal_format;
-		image.type = internal_format_to_type(internal_format);
-		image.channels = internal_format_to_channels(internal_format);
+		TextureFormat internal_format = texture->props.internal_format;
+		image.type = texture_format_to_data_type(internal_format);
+		image.channels = texture_format_to_channels(internal_format);
 		uint32_t size = data_type_size(image.type) * image.width * image.height * image.channels;
 		image.data = std::malloc(size);
 		glGetTextureImage(texture->id, level,
-						  internal_format_to_gl_base_format(internal_format),
-						  internal_format_to_gl_data_type(internal_format),
+						  texture_format_to_gl_base(internal_format),
+						  texture_format_to_gl_data_type(internal_format),
 						  size, image.data);
 		return image;
 	}
@@ -113,58 +111,64 @@ namespace Noor
 		glDeleteTextures(1, &cubemap->id);
 	}
 
-	uint32_t internal_format_to_channels(uint32_t internal_format)
+	uint32_t texture_format_to_channels(TextureFormat format)
 	{
-		switch(internal_format)
+		switch(format)
 		{
-		case NOOR_RG16F: return 2;
-
-		case NOOR_RGB8: 
-		case NOOR_SRGB8:
-		case NOOR_RGB16F: return 3;
-
-		case NOOR_RGBA8: return 4;
+			case TextureFormat::R16:
+			case TextureFormat::R16F: return 1;
+			case TextureFormat::RG16F:
+			case TextureFormat::RG32F:
+			case TextureFormat::RG8: return 2;
+			case TextureFormat::RGB8:
+			case TextureFormat::RGB16F:
+			case TextureFormat::RGB32F:
+			case TextureFormat::SRGB8: return 3;
+			case TextureFormat::RGBA8:
+			case TextureFormat::SRGB8A8: return 4;
+			case TextureFormat::DEPTH16:
+			case TextureFormat::DEPTH24:
+			case TextureFormat::DEPTH32:
+			case TextureFormat::DEPTH32F: return 1;
 		}
-
-		return 0;
 	}
 
-	uint32_t internal_format_to_type(uint32_t internal_format)
-	{
-		return internal_format_to_gl_data_type(internal_format);
-	}
+	// uint32_t internal_format_to_type(uint32_t internal_format)
+	// {
+	// 	return internal_format_to_gl_data_type(internal_format);
+	// }
 
-	uint32_t internal_format_to_gl_base_format(uint32_t internal_format)
-	{
-		switch(internal_format)
-		{
-		case NOOR_RG16F: return GL_RG;
+	// uint32_t internal_format_to_gl_base_format(uint32_t internal_format)
+	// {
+	// 	switch(internal_format)
+	// 	{
+	// 	case NOOR_RG16F: return GL_RG;
 
-		case NOOR_RGB8: 
-		case NOOR_SRGB8:
-		case NOOR_RGB32F: 
-		case NOOR_RGB16F: return GL_RGB;
+	// 	case NOOR_RGB8: 
+	// 	case NOOR_SRGB8:
+	// 	case NOOR_RGB32F: 
+	// 	case NOOR_RGB16F: return GL_RGB;
 
-		case NOOR_RGBA8: return GL_RGBA;
-		}
+	// 	case NOOR_RGBA8: return GL_RGBA;
+	// 	}
 
-		return 0;
-	}
+	// 	return 0;
+	// }
 	
-	uint32_t internal_format_to_gl_data_type(uint32_t internal_format)
-	{
-		switch(internal_format)
-		{
-		case NOOR_RGB8:
-		case NOOR_SRGB8:
-		case NOOR_RGBA8: return GL_UNSIGNED_BYTE;
+	// uint32_t internal_format_to_gl_data_type(uint32_t internal_format)
+	// {
+	// 	switch(internal_format)
+	// 	{
+	// 	case NOOR_RGB8:
+	// 	case NOOR_SRGB8:
+	// 	case NOOR_RGBA8: return GL_UNSIGNED_BYTE;
 
-		case NOOR_RG16F:
-		case NOOR_RGB16F: return GL_HALF_FLOAT;
+	// 	case NOOR_RG16F:
+	// 	case NOOR_RGB16F: return GL_HALF_FLOAT;
 
-		case NOOR_RGB32F: return GL_FLOAT;
-		}
+	// 	case NOOR_RGB32F: return GL_FLOAT;
+	// 	}
 
-		return 0;
-	}
+	// 	return 0;
+	// }
 }    

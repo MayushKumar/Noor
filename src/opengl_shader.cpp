@@ -119,6 +119,17 @@ namespace Noor
 		return location;
 	}
 
+	// void set_shader_uniform(Ref<Shader> shader, const ShaderUniform& uniform)
+	// {
+	// 	switch(uniform.type)
+	// 	{
+	// 	case DataType::F32X3:
+	// 		glProgramUniform3fv(shader->id, get_uniform_location(shader, uniform.name.c_str()), uniform.data);
+	// 		glProgramUniform3fv(shader->id, get_uniform_location(shader, uniform.name.c_str()), uniform.data);
+			
+	// 	}
+	// }
+
 	void set_shader_uniform_vec3(Ref<Shader> shader, const char *name, glm::vec3 vec)
 	{
 		glProgramUniform3fv(shader->id, get_uniform_location(shader, name), 1, glm::value_ptr(vec));

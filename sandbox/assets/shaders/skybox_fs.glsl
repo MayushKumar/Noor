@@ -9,5 +9,4 @@ out vec4 COLOR;
 void main()
 {
 	COLOR = texture(u_env_map, normalize(v_PosDir));
-	COLOR = textureLod(u_env_map, normalize(v_PosDir), 0.0);
 }

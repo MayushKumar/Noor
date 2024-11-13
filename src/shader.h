@@ -9,6 +9,13 @@
 namespace Noor
 {
 
+	struct ShaderUniform
+	{
+		std::string name;
+		DataType type;
+		void* data;
+	};
+
 	struct Shader
 	{
 		std::string vs_file_path;
@@ -19,6 +26,8 @@ namespace Noor
 	Ref<Shader> create_shader_from_files(const char* vs_file_path, const char* fs_file_path);
 	bool recompile_shader(Ref<Shader> shader);
 	void bind_shader(Ref<Shader> shader);
+
+	void set_shader_uniform(Ref<Shader> shader, const ShaderUniform& uniform);
 
 	void set_shader_uniform_vec3(Ref<Shader> shader, const char *name, glm::vec3 vec);
 	void set_shader_uniform_mat4(Ref<Shader> shader, const char* name, glm::mat4& mat);
