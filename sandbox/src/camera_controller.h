@@ -22,11 +22,10 @@ public:
 private:
 	Noor::Ref<Noor::Camera> m_camera;
 	Noor::Window::WindowHandle m_window_handle;
-	float m_right_joystick_x = 0;
-	float m_right_joystick_y = 0;
+	float m_right_joystick_x = 0, m_right_joystick_y = 0;
 	glm::vec3 m_pos_delta = glm::vec3(0.0f);
 	glm::vec2 m_drag_mouse_pos;
 	glm::vec2 m_current_mouse_pos;
-	float m_yaw, m_pitch = 0.0f;
+	float m_yaw = 0.0f, m_pitch = 0.0f;
 	bool m_is_enabled = false;
 };

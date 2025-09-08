@@ -39,7 +39,7 @@ set(src
 
 add_library(Noor STATIC ${src})
 
-target_link_libraries(Noor glad glfw spdlog glm)
+target_link_libraries(Noor glad glfw spdlog glm imgui)
 target_include_directories(Noor PUBLIC
   "src"
   "deps/glad/include"
@@ -48,13 +48,12 @@ target_include_directories(Noor PUBLIC
   "deps/glm"
   "deps/stb"
   "deps/tinygltf"
+  "deps/imgui"
+  "deps/imgui/backends"
   )
 
 set_target_properties(Noor PROPERTIES LINKER_LANGUAGE CXX)
 
-add_subdirectory(deps/glad)
-add_subdirectory(deps/glfw)
-add_subdirectory(deps/spdlog)
-add_subdirectory(deps/glm)
+add_subdirectory(deps)
 
 add_subdirectory(sandbox)

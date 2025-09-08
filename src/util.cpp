@@ -5,6 +5,7 @@
 
 #include <fstream>
 #include <cstring>
+#include <unistd.h>
 
 #include <stb_image.h>
 #include <stb_image_write.h>

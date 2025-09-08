@@ -7,12 +7,20 @@
 #include "glm/geometric.hpp"
 #include "renderer_data.h"
 #include "shader.h"
+#include "skybox.h"
 #include "texture.h"
 #include "window.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/noise.hpp>
+
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/string_cast.hpp>
+
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 
 #define RENDER_MODEL 1
 
@@ -142,6 +150,21 @@ int main()
 	window_handle = Noor::Window::create_window(window_props);
 	Noor::init(window_handle, window_props);
 
+	// Setup Dear ImGui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
+	io.Fonts->AddFontFromFileTTF("assets/fonts/CommitMono-400-Regular.otf", 14);
+
+	// Setup Platform/Renderer backends
+	ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)window_handle, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
+	ImGui_ImplOpenGL3_Init();
+
+
+
 	camera_controller = CameraController(window_handle, glm::radians(60.0f),
 										 (float)c_WINDOW_WIDTH / (float)c_WINDOW_HEIGHT, 0.1f, 100.0f);
 
@@ -159,14 +182,17 @@ int main()
 
 #if RENDER_MODEL
 	model_mats[1] = glm::rotate(glm::identity<glm::mat4>(), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	model_mats[0] = glm::identity<glm::mat4>();
+	model_mats[0] = glm::rotate(glm::identity<glm::mat4>(), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	// model_mats[0] = glm::identity<glm::mat4>();
 	normal_mats[1] = glm::inverse(glm::transpose(model_mats[1]));
 	normal_mats[0] = glm::inverse(glm::transpose(model_mats[0]));
-	models[1] = Noor::load_model("assets/models/cerberus/gltf/Cerberus.gltf");
+	models[0] = Noor::load_model("assets/models/cerberus/gltf/Cerberus.gltf");
 	// models[0] = Noor::load_model("assets/models/chest/treasure_chest_2k.gltf");
 	// models[0] = Noor::load_model("assets/models/chess_set/chess_set_2k.gltf");
-	// models[0] = Noor::load_model("assets/models/sponza/export/sponza.gltf");
-	models[0] = Noor::load_model("assets/models/brass_goblets/brass_goblets_2k.gltf");
+	// models[0] = Noor::load_model("assets/models/Sponza/glTF/Sponza.gltf");
+	// models[0] = Noor::load_model("assets/models/brass_goblets/brass_goblets_2k.gltf");
+	models[1] = Noor::load_model("assets/models/damaged_helmet/DamagedHelmet.glb");
+	// models[0] = Noor::load_model("assets/models/damaged_helmet/DamagedHelmet.glb");
 #endif
 
 	terrain_grid = generate_grid(64, 0.1);
@@ -191,10 +217,10 @@ int main()
 
 
 	// ---------------------------------------- Sky Box -----------------------------------------------------------------------
-	// Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/rosendal_park_sunset_4k.hdr");
+	Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/rosendal_park_sunset_4k.hdr");
 	// Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/cobblestone_street_night_4k.hdr");
 	// Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/old_hall_4k.hdr");
-	Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/victoria_sunset_4k.hdr");
+	// Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/victoria_sunset_4k.hdr");
 	// Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/fireplace_4k.hdr");
 	// Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/quarry_cloudy_4k.hdr");
 	// Noor::Util::Image env_img = Noor::Util::load_image("assets/textures/environment/puresky_4k.hdr");
@@ -248,6 +274,11 @@ void game_loop() {
 		Noor::Window::swap_buffers(window_handle);
 		Noor::clear_color_buffer();
 		Noor::clear_depth_buffer();
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+		ImGui::ShowDemoWindow(); // Show demo window! :)
 		
 		Noor::push_framebuffer(framebuffer);
 		Noor::clear_color_buffer(framebuffer, 0);
@@ -268,12 +299,12 @@ void game_loop() {
 		
 		// ---------------------------- TERRAIN RENDERING --------------------------------
 
-		Noor::bind_shader(terrain_shader);
-		Noor::bind_cubemap(cubemap, 3);
-		Noor::set_shader_uniform_int(Noor::g_renderer_data->pbr_shader, "u_env_map", 3);
-		Noor::set_shader_uniform_mat4(terrain_shader, "u_view_proj_mat", camera_controller.get_view_proj_matrix());
-		Noor::set_shader_uniform_vec3(terrain_shader, "u_view_pos", camera_controller.get_position());
-		Noor::draw_indexed(terrain_grid);
+		// Noor::bind_shader(terrain_shader);
+		// Noor::bind_cubemap(cubemap, 3);
+		// Noor::set_shader_uniform_int(Noor::g_renderer_data->pbr_shader, "u_env_map", 3);
+		// Noor::set_shader_uniform_mat4(terrain_shader, "u_view_proj_mat", camera_controller.get_view_proj_matrix());
+		// Noor::set_shader_uniform_vec3(terrain_shader, "u_view_pos", camera_controller.get_position());
+		// Noor::draw_indexed(terrain_grid);
 
 		// --------------------------- MODEL RENDERING ----------------------------------
 #if RENDER_MODEL
@@ -311,6 +342,9 @@ void game_loop() {
 		Noor::set_shader_uniform_int(Noor::g_renderer_data->tonemapping_shader, "u_texture", 0);
 		Noor::bind_texture(framebuffer_color_tex, 0);
 		Noor::draw_indexed(Noor::g_renderer_data->unit_quad_vao);
+
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 }
 
@@ -327,7 +361,7 @@ void key_callback(int32_t key, int32_t action, int32_t mods) {
 	}
 	else if (key == NOOR_KEY_T && action == NOOR_PRESSED)
 	{
-		Noor::recompile_shader(terrain_shader);
+		Noor::recompile_shader(Noor::g_renderer_data->tonemapping_shader);
 	}
 	else if (key == NOOR_KEY_S && action == NOOR_PRESSED)
 	{
@@ -366,6 +400,7 @@ void key_callback(int32_t key, int32_t action, int32_t mods) {
 		is_VSync = !is_VSync;
 		Noor::Window::set_VSync(window_handle, is_VSync);
 	}
+	
 }
 
 void mouse_button_callback(int32_t button, int32_t action, int32_t mods)

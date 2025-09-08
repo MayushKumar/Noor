@@ -7,9 +7,6 @@ set(src
 
 add_executable(sandbox ${src})
 
-target_include_directories(sandbox PUBLIC
-  "../src"
-  "../deps/glm"
-  )
+target_include_directories(sandbox PUBLIC)
 
 target_link_libraries(sandbox Noor)

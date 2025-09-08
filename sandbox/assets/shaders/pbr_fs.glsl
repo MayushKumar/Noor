@@ -90,6 +90,7 @@ void main()
 
 	// COLOR = vec4( albedo * 0.04 + (f_d + f_r) * NoL * test_light_power * falloff_coeff/ (4 * PI), 1.0);
 	COLOR = vec4(ENV_MULTIPLIER * (diffuse + specular), 1.0);
+	// COLOR = vec4(mat3(v_tangent.xyz, bitangent, v_normal) * vec3(0.0, 0.0, 1.0),1.0);
 	// COLOR = vec4(vec3(metallic), 1.0);
 }
 

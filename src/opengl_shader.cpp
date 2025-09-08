@@ -90,6 +90,7 @@ namespace Noor
 
 	bool recompile_shader(Ref<Shader> shader)
 	{
+		gs_uniform_location_cache.erase(shader->id);
 		Ref<Shader> temp = create_shader_from_files(shader->vs_file_path.c_str(), shader->fs_file_path.c_str());
 		if(!temp) return false;
 		glDeleteProgram(shader->id);
@@ -152,6 +153,7 @@ namespace Noor
 
 	void delete_shader(Ref<Shader> shader)
 	{
+		gs_uniform_location_cache.erase(shader->id);
 		glDeleteProgram(shader->id);
 	}
 

@@ -28,8 +28,16 @@ namespace Noor
 		tinygltf::Model tiny_model;
 
 		NOOR_CORE_TRACE("Loading model: {}", file_path);
+		auto period_pos = path.find_last_of('.');
+		std::string extension = path.substr(period_pos + 1);
 
-		loader.LoadASCIIFromFile(&tiny_model, &err, &warn, path);
+		if(extension == "gltf")
+			loader.LoadASCIIFromFile(&tiny_model, &err, &warn, path);
+		else if(extension == "glb")
+			loader.LoadBinaryFromFile(&tiny_model, &err, &warn, path);
+		else
+			NOOR_CORE_ERROR("Unknown file extension: {0}", extension);
+
 		if (err.size()) { NOOR_CORE_ERROR("{0}", err); return nullptr; }
 		if (warn.size()) { NOOR_CORE_WARN("{0}", warn); }
 

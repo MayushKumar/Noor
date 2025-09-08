@@ -33,6 +33,7 @@ void CameraController::update()
 
 	m_camera->position += m_camera->orientation * m_pos_delta * c_TRANS_SPEED;
 
+
 	Noor::calculate_camera_view_matrix(m_camera);
 }
 

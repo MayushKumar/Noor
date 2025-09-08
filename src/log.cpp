@@ -1,5 +1,7 @@
 #include "log.h"
 
+#include <spdlog/sinks/stdout_color_sinks.h>
+
 namespace Noor
 {
 	namespace Log
